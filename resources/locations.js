@@ -1,5 +1,6 @@
 var util = require('util');
 var orm = require('orm');
+var config = require('../config')
 
 exports.index = function(req, res) {
   console.log(orm.location.find(function(locs){
@@ -11,7 +12,7 @@ exports.index = function(req, res) {
 
 exports.show = function(req, res) {
   orm.location.get(req.location, function(loc){
-    loc ? res.render('locations/show', { title: 'Viewing Location' , location: loc }) : res.send('Not found');
+    loc ? res.render('locations/show', { title: 'Viewing Location' , location: loc, config: config }) : res.send('Not found');
   });
 };
 

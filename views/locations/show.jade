@@ -1,11 +1,23 @@
-script(type='text/javascript')
-  $(document).ready(function(){
-    var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + #{location.latitude} + "," +  
-                          #{location.longitude} + "&zoom=14&size=300x400&markers=color:black|label:0|" +  
-                          #{location.latitude} + ',' + #{location.longitude};  
+#map
 
-    $("#map").remove();  
-    $('body').append(  
-      $(document.createElement("img")).attr("src", image_url).attr('id','map')
-    );
+script(type='text/javascript')
+  
+  $(document).ready(function(){
+    var map = new L.Map('map', {
+        center: new L.LatLng(#{location.latitude}, #{location.longitude}),
+        zoom: 13
+    });
+    
+    var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/#{config.leaflet.apikey}/997/256/{z}/{x}/{y}.png',
+    cloudmade = new L.TileLayer(cloudmadeUrl, {maxZoom: 18});
+    
+    map.addLayer(cloudmade);
+  
+    var markerLocation = new L.LatLng(#{location.latitude}, #{location.longitude});
+    
+    var marker = new L.Marker(markerLocation);
+    map.addLayer(marker);
+    
+    marker.bindPopup("#{location.comment}").openPopup();
+    
   });
