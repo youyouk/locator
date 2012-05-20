@@ -4,24 +4,31 @@ script(type='text/javascript')
     navigator.geolocation.getCurrentPosition(geoHandler);
   
     function geoHandler(position) {
-      console.log(position);
+      
       var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + "," +  
                           position.coords.longitude + "&zoom=14&size=300x400&markers=color:black|label:0|" +  
                           position.coords.latitude + ',' + position.coords.longitude;  
 
-          $("#map").remove();  
-          $('body').append(  
-              $(document.createElement("img")).attr("src", image_url).attr('id','map')
-          );
-          $('body').append('<input id="locComment" type="text"></input>');
-          $('body').append('<input id="locSubmit" type="submit"></input>');
-          
-          $('#locSubmit').click(function(){
-            $.post('/', {
-             location: {'lon' : position.coords.longitude, 'lat' : position.coords.latitude, 'acc' : position.coords.accuracy, 'timest' : position.timestamp, 'comment' : $('#locComment').val()} 
-            })
-          });
-          
+      $("#map").remove();  
+      $('body').append(  
+          $(document.createElement("img")).attr("src", image_url).attr('id','map')
+      );
+      $('body').append('<input id="locComment" type="text"></input>');
+      $('body').append('<input id="locSubmit" type="submit"></input>');
+      
+      $('#locSubmit').click(function(){
+        $.ajax('/locations', {
+          type: 'POST',
+          data: {
+            location: {
+              'lon' : position.coords.longitude, 
+              'lat' : position.coords.latitude, 
+              'acc' : position.coords.accuracy, 
+              'timest' : position.timestamp, 
+              'comment' : $('#locComment').val()
+              } 
+          }
+        })
+      });     
     };
-
   });

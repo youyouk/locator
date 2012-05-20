@@ -1,0 +1,11 @@
+script(type='text/javascript')
+  $(document).ready(function(){
+    var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + #{location.latitude} + "," +  
+                          #{location.longitude} + "&zoom=14&size=300x400&markers=color:black|label:0|" +  
+                          #{location.latitude} + ',' + #{location.longitude};  
+
+    $("#map").remove();  
+    $('body').append(  
+      $(document.createElement("img")).attr("src", image_url).attr('id','map')
+    );
+  });
